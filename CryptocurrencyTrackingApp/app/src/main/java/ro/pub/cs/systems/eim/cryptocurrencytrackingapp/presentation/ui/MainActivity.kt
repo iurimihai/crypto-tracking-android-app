@@ -1,7 +1,8 @@
-package ro.pub.cs.systems.eim.cryptocurrencytrackingapp
+package ro.pub.cs.systems.eim.cryptocurrencytrackingapp.presentation.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import ro.pub.cs.systems.eim.cryptocurrencytrackingapp.R
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
