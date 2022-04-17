@@ -2,7 +2,7 @@ package ro.pub.cs.systems.eim.cryptocurrencytrackingapp.domain.models
 
 import ro.pub.cs.systems.eim.cryptocurrencytrackingapp.data.remote.dto.*
 
-data class CoinDataModel(
+data class CoinDescription(
     val description: String,
     val developmentStatus: String,
     val hashAlgorithm: String,

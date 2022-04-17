@@ -4,7 +4,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import ro.pub.cs.systems.eim.cryptocurrencytrackingapp.utils.Constants
 
-object RetrofitBuilder {
+object CoinApiBuilder {
     private fun retrofitBuild(url: String): Retrofit.Builder {
         val builder: Retrofit.Builder by lazy {
             Retrofit.Builder()
@@ -14,7 +14,7 @@ object RetrofitBuilder {
         return builder
     }
 
-    val dataApiService: CoinDataApi by lazy {
+    val descriptionApiService: CoinDataApi by lazy {
         retrofitBuild(Constants.COINS_DATA_BASE_URL)
             .build()
             .create(CoinDataApi::class.java)

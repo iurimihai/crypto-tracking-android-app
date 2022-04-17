@@ -2,9 +2,9 @@ package ro.pub.cs.systems.eim.cryptocurrencytrackingapp.data.remote.dto
 
 
 import com.google.gson.annotations.SerializedName
-import ro.pub.cs.systems.eim.cryptocurrencytrackingapp.domain.models.CoinDataModel
+import ro.pub.cs.systems.eim.cryptocurrencytrackingapp.domain.models.CoinDescription
 
-data class CoinDataDto(
+data class CoinDescriptionResponse(
     @SerializedName("description")
     val description: String,
     @SerializedName("development_status")
@@ -53,8 +53,8 @@ data class CoinDataDto(
     val whitepaper: Whitepaper
 )
 
-fun CoinDataDto.toCoinData(): CoinDataModel {
-    return CoinDataModel(
+fun CoinDescriptionResponse.toCoinDescription(): CoinDescription {
+    return CoinDescription(
         description = description,
         developmentStatus = developmentStatus,
         hashAlgorithm = hashAlgorithm,

@@ -2,9 +2,9 @@ package ro.pub.cs.systems.eim.cryptocurrencytrackingapp.data.remote.dto
 
 
 import com.google.gson.annotations.SerializedName
-import ro.pub.cs.systems.eim.cryptocurrencytrackingapp.domain.models.CoinModel
+import ro.pub.cs.systems.eim.cryptocurrencytrackingapp.domain.models.Coin
 
-data class CoinDto(
+data class CoinResponse(
     @SerializedName("id")
     val id: String,
     @SerializedName("is_active")
@@ -21,9 +21,10 @@ data class CoinDto(
     val type: String
 )
 
-fun CoinDto.toCoin(): CoinModel {
-    return CoinModel(
+fun CoinResponse.toCoin(): Coin {
+    return Coin(
         coinId = id,
+        name = name,
         symbol = symbol
     )
 }
