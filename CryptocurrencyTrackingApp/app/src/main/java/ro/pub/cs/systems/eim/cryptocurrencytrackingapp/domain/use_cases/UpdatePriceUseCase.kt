@@ -21,6 +21,6 @@ class UpdatePriceUseCase(
                 emit(updatedPrice)
                 delay(Constants.REFRESH_PRICE_INTERVAL)
             }
-        }.flowOn(Dispatchers.IO)
+        }
     }
 }
