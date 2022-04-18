@@ -1,4 +1,4 @@
-package ro.pub.cs.systems.eim.cryptocurrencytrackingapp.presentation.view_models
+package ro.pub.cs.systems.eim.cryptocurrencytrackingapp.ui.coin_description
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

@@ -18,7 +18,6 @@ class UpdatePriceUseCase(
             while (currentCoroutineContext().isActive) {
                 val updatedPrice =
                     coinsRepository.getCoinPrice(coinSymbol + refCurrency).price
-
                 emit(updatedPrice)
                 delay(Constants.REFRESH_PRICE_INTERVAL)
             }

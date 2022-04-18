@@ -10,5 +10,7 @@ object Constants {
     // By default, prices will be shown in USD
     const val DEFAULT_REF_CURRENCY = "USDT"
 
+    const val COIN_ID = "coinId"
+
     const val REFRESH_PRICE_INTERVAL: Long = 5000
 }

@@ -11,5 +11,6 @@ import ro.pub.cs.systems.eim.cryptocurrencytrackingapp.utils.Constants
 data class Coin(
     val coinId: String,
     val name: String,
-    val symbol: String
+    val symbol: String,
+    var price: String? = null
 )

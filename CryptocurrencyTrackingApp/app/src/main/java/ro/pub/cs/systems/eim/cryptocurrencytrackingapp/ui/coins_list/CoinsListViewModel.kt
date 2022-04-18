@@ -1,22 +1,16 @@
-package ro.pub.cs.systems.eim.cryptocurrencytrackingapp.presentation.view_models
+package ro.pub.cs.systems.eim.cryptocurrencytrackingapp.ui.coins_list
 
-import android.content.Context
-import android.view.View
-import android.widget.TextView
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asLiveData
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import ro.pub.cs.systems.eim.cryptocurrencytrackingapp.domain.models.Coin
 import ro.pub.cs.systems.eim.cryptocurrencytrackingapp.domain.use_cases.GetCoinsListUseCase
 import ro.pub.cs.systems.eim.cryptocurrencytrackingapp.domain.use_cases.UpdatePriceUseCase
+import ro.pub.cs.systems.eim.cryptocurrencytrackingapp.utils.Constants
 
 class CoinsListViewModel(
     private val getCoinsListUseCase: GetCoinsListUseCase,
@@ -24,7 +18,10 @@ class CoinsListViewModel(
     ) : ViewModel() {
 
     private val _coins: MutableLiveData<List<Coin>> by lazy { MutableLiveData() }
-    val coins get() = _coins
+    val coins: LiveData<List<Coin>> get() = _coins
+
+    private val _coinPrice = MutableStateFlow<String>("0.0")
+    val coinPrice: StateFlow<String> = _coinPrice
 
     init {
         fetchCoins()
@@ -36,14 +33,13 @@ class CoinsListViewModel(
         }
     }
 
-    suspend fun getUpdatedPrice(coin: Coin, refCurrency: String) =
-            updatePriceUseCase(coin.symbol, refCurrency)
+//    suspend fun getUpdatedPrice(coin: Coin, refCurrency: String) =
+//        updatePriceUseCase(coin.symbol, refCurrency).asLiveData(Dispatchers.IO)
+//    }
 
-//    fun fetchCoinPrice(coin: Coin, refCurrency: String) =
-//        viewModelScope.launch(currentJob) {
-//            val updatedPrice = updatePriceUseCase(coin.symbol, refCurrency)
-//            updatedPrice.collect { coin.price = it }
-//        }
+
+    suspend fun fetchCoinPrice(coin: Coin, refCurrency: String) =
+        updatePriceUseCase(coin.symbol, refCurrency)
 
 //    suspend fun getCoinPriceUpdate(coin: Coin, refCurrency: String) =
 //            updatePriceUseCase(coin.symbol, refCurrency).asLiveData()

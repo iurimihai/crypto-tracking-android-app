@@ -4,10 +4,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.coins_list.MainActivity">
+    tools:context=".ui.coin_description.CoinDescriptionActivity">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_view_list"
+        android:id="@+id/recycler_view_description"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clipToPadding="false"
