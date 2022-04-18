@@ -6,6 +6,6 @@ import ro.pub.cs.systems.eim.cryptocurrencytrackingapp.data.remote.dto.CoinPrice
 
 interface CoinPriceApi {
 
-    @GET("/api/v3/ticker/price")
+    @GET("api/v3/ticker/price")
     suspend fun getUpdatedPrice(@Query("symbol") symbol: String): CoinPriceResponse
 }
