@@ -18,10 +18,12 @@ class CoinsListViewModel(
     ) : ViewModel() {
 
     private val _coins: MutableLiveData<List<Coin>> by lazy { MutableLiveData() }
-    val coins: LiveData<List<Coin>> get() = _coins
+    val coins: LiveData<List<Coin>>
+        get() = _coins
 
-    private val _coinPrice = MutableStateFlow<String>("0.0")
-    val coinPrice: StateFlow<String> = _coinPrice
+//    private val _coinPrice: MutableLiveData<String> by lazy { MutableLiveData() }
+//    var coinPrice: LiveData<String>
+//        get() = _coinPrice
 
     init {
         fetchCoins()
@@ -33,9 +35,8 @@ class CoinsListViewModel(
         }
     }
 
-//    suspend fun getUpdatedPrice(coin: Coin, refCurrency: String) =
-//        updatePriceUseCase(coin.symbol, refCurrency).asLiveData(Dispatchers.IO)
-//    }
+    fun getUpdatedPrice(coin: Coin, refCurrency: String) =
+        updatePriceUseCase(coin.symbol, refCurrency)
 
 
     suspend fun fetchCoinPrice(coin: Coin, refCurrency: String) =

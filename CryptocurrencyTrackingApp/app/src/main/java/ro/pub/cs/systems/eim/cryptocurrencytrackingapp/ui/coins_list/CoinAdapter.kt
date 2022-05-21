@@ -1,9 +1,11 @@
 package ro.pub.cs.systems.eim.cryptocurrencytrackingapp.ui.coins_list
 
 import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
 import android.widget.TextView
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
@@ -13,8 +15,11 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import org.w3c.dom.Text
 import ro.pub.cs.systems.eim.cryptocurrencytrackingapp.R
 import ro.pub.cs.systems.eim.cryptocurrencytrackingapp.data.repository.CoinRepository
+import ro.pub.cs.systems.eim.cryptocurrencytrackingapp.databinding.CoinViewBinding
 import ro.pub.cs.systems.eim.cryptocurrencytrackingapp.domain.models.Coin
 import ro.pub.cs.systems.eim.cryptocurrencytrackingapp.domain.use_cases.GetCoinsListUseCase
 import ro.pub.cs.systems.eim.cryptocurrencytrackingapp.domain.use_cases.UpdatePriceUseCase
@@ -24,13 +29,27 @@ import ro.pub.cs.systems.eim.cryptocurrencytrackingapp.utils.Constants
 
 class CoinAdapter(
     private val viewModel: CoinsListViewModel,
-    private val lifecycleOwner: LifecycleOwner
+    private val lifecycleOwner: LifecycleOwner,
+    private val onItemClicked: (coin: Coin) -> Unit
 ): RecyclerView.Adapter<CoinAdapter.CoinViewHolder>() {
     private val coinsListUseCase = GetCoinsListUseCase(CoinRepository)
     private val updatePriceUseCase = GetCoinsListUseCase(CoinRepository)
 
 
-    private lateinit var coins: List<Coin>
+    private var coins: List<Coin> = mutableListOf(
+            Coin("btc-bitcoin", "Bitcoin", "BTC", "40000"),
+            Coin("eth-ethereum", "Ethereum", "ETH", "2000"),
+        Coin("eth-ethereum", "Ethereum", "ETH", "2000"),
+        Coin("eth-ethereum", "Ethereum", "ETH"),
+        Coin("eth-ethereum", "Ethereum", "ETH"),
+        Coin("eth-ethereum", "Ethereum", "ETH"),
+        Coin("eth-ethereum", "Ethereum", "ETH"),
+        Coin("eth-ethereum", "Ethereum", "ETH"),
+        Coin("eth-ethereum", "Ethereum", "ETH"),
+        Coin("eth-ethereum", "Ethereum", "ETH"),
+        Coin("eth-ethereum", "Ethereum", "ETH"),
+        Coin("eth-ethereum", "Ethereum", "ETH")
+    )
 
     fun setData() {
         CoroutineScope(Dispatchers.Main).launch {
@@ -40,37 +59,47 @@ class CoinAdapter(
         }
     }
 
-    inner class CoinViewHolder(itemView: View): RecyclerView.ViewHolder(itemView) {
-        val coinNameTv: TextView = itemView.findViewById(R.id.coin_name)
-        val coinPriceTv: TextView = itemView.findViewById(R.id.coin_price)
+    fun updatePrice(coin: Coin) {
+        var price = viewModel.getUpdatedPrice(coin, "USDT")
+        price.observe(lifecycleOwner, Observer {
+            // TODO: get updated price in IO and set it in Main/Default
+//            withContext(Dispatchers.Main) {
+//
+//            }
+        })
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CoinViewHolder {
-        val layout = LayoutInflater
-            .from(parent.context)
-            .inflate(R.layout.activity_main, parent, false)
-        return CoinViewHolder(layout)
-    }
+    inner class CoinViewHolder(private val coinViewBinding: CoinViewBinding):
+            RecyclerView.ViewHolder(coinViewBinding.root) {
 
-    override fun onBindViewHolder(holder: CoinViewHolder, position: Int) {
-        val coin = coins[position]
-        val coinName = "${coin.name} (${coin.symbol})"
+        fun bind(coin: Coin) {
+            coinViewBinding.apply {
+                tvCoinName.text = getNameFormat(coin)
+                tvCoinPrice.text = coin.price
 
-        holder.coinNameTv.text = coinName
-        CoroutineScope(Dispatchers.Main).launch {
-            viewModel.fetchCoinPrice(coin, Constants.DEFAULT_REF_CURRENCY).collect {
-                holder.coinPriceTv.text = it
+                root.setOnClickListener {
+                    val context = root.context
+                    val intent = Intent(context, CoinDescriptionActivity::class.java)
+
+                    intent.putExtra(Constants.COIN_ID, coin.coinId)
+                    context.startActivity(intent)
+//                onItemClicked(coin)
+                }
             }
         }
-
-        holder.itemView.setOnClickListener {
-            val context = holder.itemView.context
-            val intent = Intent(context, CoinDescriptionActivity::class.java)
-
-            intent.putExtra(Constants.COIN_ID, coin.coinId)
-            context.startActivity(intent)
-        }
     }
+
+    private fun getNameFormat(coin: Coin): String = "${coin.name} (${coin.symbol})"
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CoinViewHolder {
+        val coinViewBinding = CoinViewBinding.inflate(LayoutInflater.from(parent.context),
+                                                    parent,
+                                        false)
+        return CoinViewHolder(coinViewBinding)
+    }
+
+    override fun onBindViewHolder(holder: CoinViewHolder, position: Int) =
+            holder.bind(coins[position])
 
     override fun getItemCount() = coins.size
 }

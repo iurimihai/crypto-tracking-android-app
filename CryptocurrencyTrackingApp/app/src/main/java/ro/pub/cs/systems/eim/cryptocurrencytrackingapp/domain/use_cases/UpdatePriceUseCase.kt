@@ -1,5 +1,7 @@
 package ro.pub.cs.systems.eim.cryptocurrencytrackingapp.domain.use_cases
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.liveData
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.delay
@@ -13,14 +15,14 @@ import ro.pub.cs.systems.eim.cryptocurrencytrackingapp.utils.Constants
 class UpdatePriceUseCase(
     private val coinsRepository: CoinRepository
 ) {
-    suspend operator fun invoke(coinSymbol: String, refCurrency: String): Flow<String> {
-        return flow {
+    operator fun invoke(coinSymbol: String, refCurrency: String): LiveData<String> {
+        return liveData(Dispatchers.IO) {
             while (currentCoroutineContext().isActive) {
                 val updatedPrice =
                     coinsRepository.getCoinPrice(coinSymbol + refCurrency).price
                 emit(updatedPrice)
                 delay(Constants.REFRESH_PRICE_INTERVAL)
             }
-        }.flowOn(Dispatchers.IO)
+        }
     }
 }

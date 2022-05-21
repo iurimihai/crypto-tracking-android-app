@@ -15,6 +15,8 @@ class CoinDescriptionActivity: AppCompatActivity() {
 
         val coinId = intent?.extras?.getString(Constants.COIN_ID).toString()
 
+        binding.tvDescriptionTest.text = coinId
+
 //        val recyclerView = binding.recyclerView
 //        recyclerView.layoutManager = LinearLayoutManager(this)
 
