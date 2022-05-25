@@ -1,72 +1,62 @@
 package ro.pub.cs.systems.eim.cryptocurrencytrackingapp.ui.coins_list
 
-import android.content.Intent
-import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
 import android.widget.TextView
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
-import androidx.lifecycle.viewModelScope
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import org.w3c.dom.Text
-import ro.pub.cs.systems.eim.cryptocurrencytrackingapp.R
 import ro.pub.cs.systems.eim.cryptocurrencytrackingapp.data.repository.CoinRepository
 import ro.pub.cs.systems.eim.cryptocurrencytrackingapp.databinding.CoinViewBinding
 import ro.pub.cs.systems.eim.cryptocurrencytrackingapp.domain.models.Coin
 import ro.pub.cs.systems.eim.cryptocurrencytrackingapp.domain.use_cases.GetCoinsListUseCase
-import ro.pub.cs.systems.eim.cryptocurrencytrackingapp.domain.use_cases.UpdatePriceUseCase
-import ro.pub.cs.systems.eim.cryptocurrencytrackingapp.ui.coin_description.CoinDescriptionActivity
-import ro.pub.cs.systems.eim.cryptocurrencytrackingapp.utils.Constants
 
 
 class CoinAdapter(
     private val viewModel: CoinsListViewModel,
-    private val lifecycleOwner: LifecycleOwner,
-    private val onItemClicked: (coin: Coin) -> Unit
+    private val lifecycleOwner: LifecycleOwner
 ): RecyclerView.Adapter<CoinAdapter.CoinViewHolder>() {
     private val coinsListUseCase = GetCoinsListUseCase(CoinRepository)
     private val updatePriceUseCase = GetCoinsListUseCase(CoinRepository)
 
-
-    private var coins: List<Coin> = mutableListOf(
-            Coin("btc-bitcoin", "Bitcoin", "BTC", "40000"),
-            Coin("eth-ethereum", "Ethereum", "ETH", "2000"),
-        Coin("eth-ethereum", "Ethereum", "ETH", "2000"),
-        Coin("eth-ethereum", "Ethereum", "ETH"),
-        Coin("eth-ethereum", "Ethereum", "ETH"),
-        Coin("eth-ethereum", "Ethereum", "ETH"),
-        Coin("eth-ethereum", "Ethereum", "ETH"),
-        Coin("eth-ethereum", "Ethereum", "ETH"),
-        Coin("eth-ethereum", "Ethereum", "ETH"),
-        Coin("eth-ethereum", "Ethereum", "ETH"),
-        Coin("eth-ethereum", "Ethereum", "ETH"),
-        Coin("eth-ethereum", "Ethereum", "ETH")
+    private var coins = mutableListOf<Coin>(
+            Coin("btc-bitcoin", "Bitcoin", "BTC"),
+            Coin("eth-ethereum", "Ethereum", "ETH"),
+            Coin("xrp-xrp", "XRP", "XRP"),
+            Coin("ada-cardano", "Cardano", "ADA"),
+            Coin("sol-solana", "Solana", "SOL"),
+            Coin("btc-bitcoin", "Bitcoin", "BTC"),
+            Coin("eth-ethereum", "Ethereum", "ETH"),
+            Coin("xrp-xrp", "XRP", "XRP"),
+            Coin("ada-cardano", "Cardano", "ADA"),
+            Coin("sol-solana", "Solana", "SOL"),
+            Coin("btc-bitcoin", "Bitcoin", "BTC"),
+            Coin("eth-ethereum", "Ethereum", "ETH"),
+            Coin("xrp-xrp", "XRP", "XRP"),
+            Coin("ada-cardano", "Cardano", "ADA"),
+            Coin("sol-solana", "Solana", "SOL")
     )
 
+//    private var coins: List<Coin> = mutableListOf()
+
+    // TODO: if favorites filter -> cache data locally in sqlite
+    // TODO: if new item is added -> update cache locally and update Firebase DB
     fun setData() {
-        CoroutineScope(Dispatchers.Main).launch {
-            viewModel.coins.observe(lifecycleOwner, Observer {
-                coins = it
-            })
-        }
+        viewModel.coins.observe(lifecycleOwner, Observer {
+//            coins = it.slice(0..10)
+//            delay(2000L)
+        })
     }
 
-    fun updatePrice(coin: Coin) {
-        var price = viewModel.getUpdatedPrice(coin, "USDT")
-        price.observe(lifecycleOwner, Observer {
-            // TODO: get updated price in IO and set it in Main/Default
-//            withContext(Dispatchers.Main) {
-//
-//            }
-        })
+    fun updatePrice(coin: Coin, tvCoinPrice: TextView) {
+        val price = viewModel.getUpdatedPrice(coin, "USDT")
+        CoroutineScope(Dispatchers.Main).launch {
+            price.collect { tvCoinPrice.text = it }
+        }
+
     }
 
     inner class CoinViewHolder(private val coinViewBinding: CoinViewBinding):
@@ -75,21 +65,16 @@ class CoinAdapter(
         fun bind(coin: Coin) {
             coinViewBinding.apply {
                 tvCoinName.text = getNameFormat(coin)
-                tvCoinPrice.text = coin.price
+                updatePrice(coin, tvCoinPrice)
 
                 root.setOnClickListener {
-                    val context = root.context
-                    val intent = Intent(context, CoinDescriptionActivity::class.java)
-
-                    intent.putExtra(Constants.COIN_ID, coin.coinId)
-                    context.startActivity(intent)
-//                onItemClicked(coin)
+                    val action = CoinsListFragmentDirections
+                                    .actionCoinsListFragmentToCoinDescriptionFragment(coin.coinId)
+                    root.findNavController().navigate(action)
                 }
             }
         }
     }
-
-    private fun getNameFormat(coin: Coin): String = "${coin.name} (${coin.symbol})"
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CoinViewHolder {
         val coinViewBinding = CoinViewBinding.inflate(LayoutInflater.from(parent.context),
@@ -102,4 +87,6 @@ class CoinAdapter(
             holder.bind(coins[position])
 
     override fun getItemCount() = coins.size
+
+    private fun getNameFormat(coin: Coin): String = "${coin.name} (${coin.symbol})"
 }
