@@ -15,14 +15,14 @@ import ro.pub.cs.systems.eim.cryptocurrencytrackingapp.utils.Constants
 class UpdatePriceUseCase(
     private val coinsRepository: CoinRepository
 ) {
-    operator fun invoke(coinSymbol: String, refCurrency: String): LiveData<String> {
-        return liveData(Dispatchers.IO) {
+    operator fun invoke(coinSymbol: String, refCurrency: String): Flow<String> {
+        return flow {
             while (currentCoroutineContext().isActive) {
                 val updatedPrice =
                     coinsRepository.getCoinPrice(coinSymbol + refCurrency).price
                 emit(updatedPrice)
                 delay(Constants.REFRESH_PRICE_INTERVAL)
             }
-        }
+        }.flowOn(Dispatchers.IO)
     }
 }

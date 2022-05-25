@@ -4,12 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.coins_list.MainActivity">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".ui.coins_list.CoinsActivity">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvCoinsList"
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/nav_host_fragment"
+        android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:clipToPadding="false"
-        android:padding="16dp" />
+        app:defaultNavHost="true"
+        app:navGraph="@navigation/nav_graph" />
 </FrameLayout>
