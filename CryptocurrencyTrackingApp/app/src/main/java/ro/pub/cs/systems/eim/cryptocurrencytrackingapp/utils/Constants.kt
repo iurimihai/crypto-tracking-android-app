@@ -14,4 +14,6 @@ object Constants {
     const val FAVORITES = "favorites"
 
     const val REFRESH_PRICE_INTERVAL: Long = 5000
+
+    const val REGISTER = "REGISTER"
 }
