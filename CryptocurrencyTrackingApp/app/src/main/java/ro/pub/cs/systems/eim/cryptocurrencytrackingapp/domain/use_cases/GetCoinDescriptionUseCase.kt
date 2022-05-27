@@ -4,6 +4,7 @@ import ro.pub.cs.systems.eim.cryptocurrencytrackingapp.data.remote.dto.toCoinDes
 import ro.pub.cs.systems.eim.cryptocurrencytrackingapp.data.repository.CoinRepository
 import ro.pub.cs.systems.eim.cryptocurrencytrackingapp.domain.models.CoinDescription
 
+// TODO: error checks
 class GetCoinDescriptionUseCase(
     private val coinsRepository: CoinRepository
 ) {

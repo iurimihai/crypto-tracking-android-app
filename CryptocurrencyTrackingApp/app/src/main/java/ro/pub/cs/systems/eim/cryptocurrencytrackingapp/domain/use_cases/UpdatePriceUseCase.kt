@@ -12,6 +12,7 @@ import kotlinx.coroutines.isActive
 import ro.pub.cs.systems.eim.cryptocurrencytrackingapp.data.repository.CoinRepository
 import ro.pub.cs.systems.eim.cryptocurrencytrackingapp.utils.Constants
 
+// TODO: error checks
 class UpdatePriceUseCase(
     private val coinsRepository: CoinRepository
 ) {

@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "221886411856",
+    "project_id": "cryptocurrencytrackingapp",
+    "storage_bucket": "cryptocurrencytrackingapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:221886411856:android:496ff50caeb897dd344d55",
+        "android_client_info": {
+          "package_name": "ro.pub.cs.systems.eim.cryptocurrencytrackingapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "221886411856-4la7q621338hq2krahkau70amqqr4v3r.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA-nZ9zRn3Fz5zSENsQDnH-s_sIGjiTAvc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "221886411856-4la7q621338hq2krahkau70amqqr4v3r.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

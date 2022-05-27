@@ -4,7 +4,6 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.Observer
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.*
@@ -19,36 +18,23 @@ class CoinAdapter(
     private val viewModel: CoinsListViewModel,
     private val lifecycleOwner: LifecycleOwner
 ): RecyclerView.Adapter<CoinAdapter.CoinViewHolder>() {
-    private val coinsListUseCase = GetCoinsListUseCase(CoinRepository)
+    private val getCoinsListUseCase = GetCoinsListUseCase(CoinRepository)
     private val updatePriceUseCase = GetCoinsListUseCase(CoinRepository)
 
-    private var coins = mutableListOf<Coin>(
-            Coin("btc-bitcoin", "Bitcoin", "BTC"),
-            Coin("eth-ethereum", "Ethereum", "ETH"),
-            Coin("xrp-xrp", "XRP", "XRP"),
-            Coin("ada-cardano", "Cardano", "ADA"),
-            Coin("sol-solana", "Solana", "SOL"),
-            Coin("btc-bitcoin", "Bitcoin", "BTC"),
-            Coin("eth-ethereum", "Ethereum", "ETH"),
-            Coin("xrp-xrp", "XRP", "XRP"),
-            Coin("ada-cardano", "Cardano", "ADA"),
-            Coin("sol-solana", "Solana", "SOL"),
-            Coin("btc-bitcoin", "Bitcoin", "BTC"),
-            Coin("eth-ethereum", "Ethereum", "ETH"),
-            Coin("xrp-xrp", "XRP", "XRP"),
-            Coin("ada-cardano", "Cardano", "ADA"),
-            Coin("sol-solana", "Solana", "SOL")
-    )
+    private var coins: List<Coin> = viewModel.coins
 
-//    private var coins: List<Coin> = mutableListOf()
+    //    private var coins: List<Coin> = mutableListOf()
 
     // TODO: if favorites filter -> cache data locally in sqlite
     // TODO: if new item is added -> update cache locally and update Firebase DB
+    // TODO: Firebase DB will be used only first time for fetching favourites
     fun setData() {
-        viewModel.coins.observe(lifecycleOwner, Observer {
-//            coins = it.slice(0..10)
-//            delay(2000L)
-        })
+//        viewModel.coins.observe(lifecycleOwner, Observer {
+////            coins = it.slice(0..10)
+////            delay(2000L)
+//        })
+
+//        coins =
     }
 
     fun updatePrice(coin: Coin, tvCoinPrice: TextView) {
