@@ -13,7 +13,7 @@ object Constants {
     const val COIN_ID = "coinId"
     const val FAVORITES = "favorites"
 
-    const val REFRESH_PRICE_INTERVAL: Long = 5000
+    const val REFRESH_PRICE_INTERVAL: Long = 60 * 1000 // 1min
 
     const val REGISTER = "REGISTER"
 }

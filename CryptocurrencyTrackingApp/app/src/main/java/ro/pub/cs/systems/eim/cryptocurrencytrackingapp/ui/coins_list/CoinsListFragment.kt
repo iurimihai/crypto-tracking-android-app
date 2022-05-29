@@ -57,8 +57,10 @@ class CoinsListFragment : Fragment() {
 //
 //        }
 //        coinAdapter.setData(viewModel.uiState.value)
+        // TODO: remove viewModel
+        // TODO: use paging3 for price update
         viewModel.coins.observe(viewLifecycleOwner, Observer {
-            coinAdapter.setData(it.data ?: emptyList())
+            coinAdapter.setData(it.data?.subList(0, 5) ?: emptyList())
             coinAdapter.notifyDataSetChanged()
         })
 

@@ -13,7 +13,7 @@ object CoinApiBuilder {
             Retrofit.Builder()
                 .baseUrl(url)
                 .addConverterFactory(GsonConverterFactory.create())
-//                .client(httpLogger())
+                .client(httpLogger())
         }
         return builder
     }
@@ -24,7 +24,7 @@ object CoinApiBuilder {
         return OkHttpClient.Builder().addInterceptor(interceptor).build()
     }
 
-    val descriptionApiService: CoinDataApi by lazy {
+    val coinApiService: CoinDataApi by lazy {
         retrofitBuild(Constants.COINS_DATA_BASE_URL)
             .build()
             .create(CoinDataApi::class.java)

@@ -53,8 +53,7 @@ class CoinsListViewModel : ViewModel() {
 
     }
 
-    fun getUpdatedPrice(coin: Coin, refCurrency: String) =
-        updatePriceUseCase(coin.symbol, refCurrency)
+    fun getUpdatedPrice(coin: Coin) = updatePriceUseCase(coin.coinId)
 
     private fun getCoins() {
         fetchJob?.cancel()

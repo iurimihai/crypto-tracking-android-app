@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.withContext
 import retrofit2.HttpException
-import ro.pub.cs.systems.eim.cryptocurrencytrackingapp.data.remote.dto.toCoin
+import ro.pub.cs.systems.eim.cryptocurrencytrackingapp.data.remote.dto.coins_list.toCoin
 import ro.pub.cs.systems.eim.cryptocurrencytrackingapp.data.repository.CoinRepository
 import ro.pub.cs.systems.eim.cryptocurrencytrackingapp.domain.models.Coin
 import ro.pub.cs.systems.eim.cryptocurrencytrackingapp.utils.Resource

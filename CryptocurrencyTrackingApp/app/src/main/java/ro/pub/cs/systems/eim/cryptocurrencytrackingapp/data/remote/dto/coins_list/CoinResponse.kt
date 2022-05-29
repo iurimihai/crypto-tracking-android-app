@@ -1,4 +1,4 @@
-package ro.pub.cs.systems.eim.cryptocurrencytrackingapp.data.remote.dto
+package ro.pub.cs.systems.eim.cryptocurrencytrackingapp.data.remote.dto.coins_list
 
 
 import com.google.gson.annotations.SerializedName

@@ -28,6 +28,7 @@ class CoinAdapter: RecyclerView.Adapter<CoinAdapter.CoinViewHolder>() {
     // TODO: if favorites filter -> cache data locally in sqlite
     // TODO: if new item is added -> update cache locally and update Firebase DB
     // TODO: Firebase DB will be used only first time for fetching favourites
+    // TODO: all from above should be performed automatically in data layer/use case
     fun setData(coins: List<Coin>) {
 //        lifecycleOwner.lifecycleScope.launch {
 //            repeat(10) {
@@ -45,8 +46,9 @@ class CoinAdapter: RecyclerView.Adapter<CoinAdapter.CoinViewHolder>() {
     }
 
     fun updatePrice(coin: Coin, tvCoinPrice: TextView) {
-        val price = viewModel.getUpdatedPrice(coin, "USDT")
+        val price = viewModel.getUpdatedPrice(coin)
         CoroutineScope(Dispatchers.Main).launch {
+//            delay(1000L)
             price.collect { tvCoinPrice.text = it }
         }
 
@@ -66,7 +68,7 @@ class CoinAdapter: RecyclerView.Adapter<CoinAdapter.CoinViewHolder>() {
         fun bind(coin: Coin) {
             coinViewBinding.apply {
                 tvCoinName.text = getNameFormat(coin)
-//                updatePrice(coin, tvCoinPrice)
+                updatePrice(coin, tvCoinPrice)
 
                 root.setOnClickListener {
                     val action = CoinsListFragmentDirections
