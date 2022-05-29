@@ -1,57 +1,52 @@
 package ro.pub.cs.systems.eim.cryptocurrencytrackingapp.ui.coins_list
 
+import android.util.Log
 import androidx.lifecycle.*
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import ro.pub.cs.systems.eim.cryptocurrencytrackingapp.domain.CoinRepository
 import ro.pub.cs.systems.eim.cryptocurrencytrackingapp.domain.models.Coin
+import ro.pub.cs.systems.eim.cryptocurrencytrackingapp.domain.use_cases.GetCoinDescriptionUseCase
 import ro.pub.cs.systems.eim.cryptocurrencytrackingapp.domain.use_cases.GetCoinsListUseCase
 import ro.pub.cs.systems.eim.cryptocurrencytrackingapp.domain.use_cases.UpdatePriceUseCase
 import ro.pub.cs.systems.eim.cryptocurrencytrackingapp.utils.Constants
+import ro.pub.cs.systems.eim.cryptocurrencytrackingapp.utils.Resource
 
-// TODO: error checks
-class CoinsListViewModel(
-    private val getCoinsListUseCase: GetCoinsListUseCase,
-    private val updatePriceUseCase: UpdatePriceUseCase
-    ) : ViewModel() {
+// TODO: DI
+class CoinsListViewModel : ViewModel() {
 
-    private val _coins = mutableListOf<Coin>(
-            Coin("btc-bitcoin", "Bitcoin", "BTC"),
-            Coin("eth-ethereum", "Ethereum", "ETH"),
-            Coin("xrp-xrp", "XRP", "XRP"),
-            Coin("ada-cardano", "Cardano", "ADA"),
-            Coin("sol-solana", "Solana", "SOL"),
-            Coin("btc-bitcoin", "Bitcoin", "BTC"),
-            Coin("eth-ethereum", "Ethereum", "ETH"),
-            Coin("xrp-xrp", "XRP", "XRP"),
-            Coin("ada-cardano", "Cardano", "ADA"),
-            Coin("sol-solana", "Solana", "SOL"),
-            Coin("btc-bitcoin", "Bitcoin", "BTC"),
-            Coin("eth-ethereum", "Ethereum", "ETH"),
-            Coin("xrp-xrp", "XRP", "XRP"),
-            Coin("ada-cardano", "Cardano", "ADA"),
-            Coin("sol-solana", "Solana", "SOL")
-    )
+//    var coins: List<Coin> = mutableListOf()
+//
+//    val coins: List<Coin>
+//        get() = _coins
 
-    val coins: MutableList<Coin>
-        get() = _coins
+    var getCoinsListUseCase = GetCoinsListUseCase(ro.pub.cs.systems.eim.cryptocurrencytrackingapp.data.repository.CoinRepository)
+    var updatePriceUseCase = UpdatePriceUseCase(ro.pub.cs.systems.eim.cryptocurrencytrackingapp.data.repository.CoinRepository)
+
+    private var _uiState = MutableStateFlow(CoinsListState())
+    var uiState: StateFlow<CoinsListState> = _uiState.asStateFlow()
+
+    private var fetchJob: Job? = null
+
+    // DEBUG
+    lateinit var coins: LiveData<Resource<List<Coin>>>
 
 //    private val _coinPrice: MutableLiveData<String> by lazy { MutableLiveData() }
 //    var coinPrice: LiveData<String>
 //        get() = _coinPrice
 
-//    init {
-//        fetchCoins()
-//    }
+    init {
+//        getCoins()
+        fetchCoins()
+    }
 
-//    private fun fetchCoins() = viewModelScope.launch {
-//        _coins.value = withContext(Dispatchers.IO) {
-//            getCoinsListUseCase()
-//        }
-//    }
+    private fun fetchCoins() {
+        coins = getCoinsListUseCase().asLiveData(Dispatchers.Default)
+    }
+
 
     // TODO: or fetchCoins(favorite: bool)
     fun fetchFavoriteCoins() {
@@ -60,6 +55,35 @@ class CoinsListViewModel(
 
     fun getUpdatedPrice(coin: Coin, refCurrency: String) =
         updatePriceUseCase(coin.symbol, refCurrency)
+
+    private fun getCoins() {
+        fetchJob?.cancel()
+        fetchJob = viewModelScope.launch {
+            getCoinsListUseCase().onEach { result ->
+                when (result) {
+                    is Resource.Success -> {
+//                        _uiState.value = CoinsListState(coins = result.data?.subList(0, 10) ?: emptyList())
+                        _uiState.update {
+                            it.copy(coins = result.data ?: emptyList())
+                        }
+                    }
+                    is Resource.Error -> {
+//                        _uiState.value = CoinsListState(error = result.message
+//                                ?: "Unexpected error")
+                        _uiState.update {
+                            it.copy(error = result.message ?: "Unexpected error")
+                        }
+                    }
+                    is Resource.Loading -> {
+//                        _uiState.value = CoinsListState(isLoading = true)
+                        _uiState.update {
+                            it.copy(isLoading = true)
+                        }
+                    }
+                }
+            }
+        }
+    }
 
     fun getFavoriteCoins() {
 
