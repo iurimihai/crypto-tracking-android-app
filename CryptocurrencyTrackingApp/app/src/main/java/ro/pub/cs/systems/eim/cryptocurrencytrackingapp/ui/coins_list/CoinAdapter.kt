@@ -7,42 +7,59 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
-import ro.pub.cs.systems.eim.cryptocurrencytrackingapp.data.repository.CoinRepository
 import ro.pub.cs.systems.eim.cryptocurrencytrackingapp.databinding.CoinViewBinding
 import ro.pub.cs.systems.eim.cryptocurrencytrackingapp.domain.models.Coin
-import ro.pub.cs.systems.eim.cryptocurrencytrackingapp.domain.use_cases.GetCoinsListUseCase
 
 
-class CoinAdapter(
-    private val viewModel: CoinsListViewModel,
-    private val lifecycleOwner: LifecycleOwner
-): RecyclerView.Adapter<CoinAdapter.CoinViewHolder>() {
-    private val getCoinsListUseCase = GetCoinsListUseCase(CoinRepository)
-    private val updatePriceUseCase = GetCoinsListUseCase(CoinRepository)
+class CoinAdapter: RecyclerView.Adapter<CoinAdapter.CoinViewHolder>() {
 
-    private var coins: List<Coin> = viewModel.coins
+    lateinit var viewModel: CoinsListViewModel
+    lateinit var lifecycleOwner: LifecycleOwner
+    lateinit var coinsUiState: CoinsListState
+
+    // DEBUG
+    lateinit var coins: List<Coin>
+
 
     //    private var coins: List<Coin> = mutableListOf()
 
     // TODO: if favorites filter -> cache data locally in sqlite
     // TODO: if new item is added -> update cache locally and update Firebase DB
     // TODO: Firebase DB will be used only first time for fetching favourites
-    fun setData() {
-//        viewModel.coins.observe(lifecycleOwner, Observer {
-////            coins = it.slice(0..10)
-////            delay(2000L)
-//        })
-
-//        coins =
+    // TODO: all from above should be performed automatically in data layer/use case
+    fun setData(coins: List<Coin>) {
+//        lifecycleOwner.lifecycleScope.launch {
+//            repeat(10) {
+//                viewModel.uiState.collect { uiState ->
+//                    coins = uiState.coins
+//                }
+//            }
+//        }
+//        while (viewModel.uiState.value.coins.isEmpty()) {
+//            coinsUiState = viewModel.uiState.value
+//        }
+//        coinsUiState = uiState
+//        notifyDataSetChanged()
+        this.coins = coins
     }
 
     fun updatePrice(coin: Coin, tvCoinPrice: TextView) {
-        val price = viewModel.getUpdatedPrice(coin, "USDT")
+        val price = viewModel.getUpdatedPrice(coin)
         CoroutineScope(Dispatchers.Main).launch {
+//            delay(1000L)
             price.collect { tvCoinPrice.text = it }
         }
 
+    }
+
+    fun priceUpdate(price: Flow<String>) {
+        CoroutineScope(Dispatchers.Main).launch {
+            price.collect {
+
+            }
+        }
     }
 
     inner class CoinViewHolder(private val coinViewBinding: CoinViewBinding):

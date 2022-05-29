@@ -1,6 +1,6 @@
 package ro.pub.cs.systems.eim.cryptocurrencytrackingapp.domain.use_cases
 
-import ro.pub.cs.systems.eim.cryptocurrencytrackingapp.data.remote.dto.toCoinDescription
+import ro.pub.cs.systems.eim.cryptocurrencytrackingapp.data.remote.dto.coin_description.toCoinDescription
 import ro.pub.cs.systems.eim.cryptocurrencytrackingapp.data.repository.CoinRepository
 import ro.pub.cs.systems.eim.cryptocurrencytrackingapp.domain.models.CoinDescription
 

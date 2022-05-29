@@ -10,6 +10,9 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupActionBarWithNavController
 import com.google.android.material.navigation.NavigationView
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import ro.pub.cs.systems.eim.cryptocurrencytrackingapp.R
 import ro.pub.cs.systems.eim.cryptocurrencytrackingapp.databinding.ActivityMainBinding
 import ro.pub.cs.systems.eim.cryptocurrencytrackingapp.ui.login.LoginActivity
