@@ -4,10 +4,15 @@ import ro.pub.cs.systems.eim.cryptocurrencytrackingapp.data.remote.api.CoinApiBu
 import ro.pub.cs.systems.eim.cryptocurrencytrackingapp.data.remote.dto.coin_description.CoinDescriptionResponse
 import ro.pub.cs.systems.eim.cryptocurrencytrackingapp.data.remote.dto.coin_ticker.CoinTickerResponse
 import ro.pub.cs.systems.eim.cryptocurrencytrackingapp.data.remote.dto.coins_list.CoinResponse
+import ro.pub.cs.systems.eim.cryptocurrencytrackingapp.domain.models.CoinMarketData
 
 object CoinRepository {
     suspend fun getCoins(): List<CoinResponse> {
         return CoinApiBuilder.coinApiService.getCoins()
+    }
+
+    suspend fun getCoinMarketData(coinId: String): CoinTickerResponse {
+        return CoinApiBuilder.coinApiService.getCoinPrice(coinId)
     }
 
     suspend fun getCoinDescription(coinId: String): CoinDescriptionResponse {

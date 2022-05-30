@@ -13,7 +13,7 @@ object CoinApiBuilder {
             Retrofit.Builder()
                 .baseUrl(url)
                 .addConverterFactory(GsonConverterFactory.create())
-                .client(httpLogger())
+//                .client(httpLogger())
         }
         return builder
     }

@@ -37,6 +37,7 @@ class CoinsActivity : AppCompatActivity() {
         // Make sure actions in the ActionBar get propagated to the NavController
         setupActionBarWithNavController(navController)
 
+        // TODO: change the actionbar
         val drawer = findViewById<DrawerLayout>(R.id.user_drawer_layout)
         toggle = ActionBarDrawerToggle(this, drawer, R.string.open, R.string.close)
         drawer.addDrawerListener(toggle)

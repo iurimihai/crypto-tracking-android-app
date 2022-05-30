@@ -1,5 +1,8 @@
 package ro.pub.cs.systems.eim.cryptocurrencytrackingapp.ui.coins_list
 
+import android.content.Context
+import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.TextView
@@ -11,6 +14,8 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
 import ro.pub.cs.systems.eim.cryptocurrencytrackingapp.databinding.CoinViewBinding
 import ro.pub.cs.systems.eim.cryptocurrencytrackingapp.domain.models.Coin
+import ro.pub.cs.systems.eim.cryptocurrencytrackingapp.ui.coin_description.CoinDetailsActivity
+import ro.pub.cs.systems.eim.cryptocurrencytrackingapp.utils.Constants
 
 
 class CoinAdapter: RecyclerView.Adapter<CoinAdapter.CoinViewHolder>() {
@@ -70,10 +75,18 @@ class CoinAdapter: RecyclerView.Adapter<CoinAdapter.CoinViewHolder>() {
                 tvCoinName.text = getNameFormat(coin)
                 updatePrice(coin, tvCoinPrice)
 
-                root.setOnClickListener {
-                    val action = CoinsListFragmentDirections
-                                    .actionCoinsListFragmentToCoinDescriptionFragment(coin.coinId)
-                    root.findNavController().navigate(action)
+                root.setOnClickListener { view ->
+//                    val action = CoinsListFragmentDirections
+//                                    .actionCoinsListFragmentToCoinDescriptionFragment(coin.coinId)
+//                    root.findNavController().navigate(action)
+
+                    Intent(view.context, CoinDetailsActivity::class.java).also {
+                        it.putExtra(Constants.COIN_ID, coin.coinId)
+//                        it.putExtra(Constants.COIN_NAME, coin.name)
+//                        it.putExtra(Constants.COIN_SYMBOL, coin.symbol)
+                        Log.d("CoinAdapter", "onclicklistener")
+                        view.context.startActivity(it)
+                    }
                 }
             }
         }
