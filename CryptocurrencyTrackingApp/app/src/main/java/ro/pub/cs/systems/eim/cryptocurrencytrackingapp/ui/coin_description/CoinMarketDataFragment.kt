@@ -46,20 +46,19 @@ class CoinMarketDataFragment : Fragment() {
         return binding?.root
     }
 
-    // TODO: Here print data
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         viewModel.coinMarketData.observe(viewLifecycleOwner, Observer {
             binding?.apply {
-                tableNameDataTextView.text = it.data?.name
-                tablePriceUSDDataTextView.text = it.data?.price?.toString()
-                tableMktCapDataTextView.text = it.data?.marketCap?.toString()
-                tableCirculatingSupplyDataTextView.text = it.data?.circulatingSupply?.toString()
-                tableTotalSupplyDataTextView.text = it.data?.totalSupply?.toString()
-                tableMaxSupplyDataTextView.text = it.data?.maxSupply?.toString()
-                table1hrChangeDataTextView.text = it.data?.percentChange1h?.toString()
-                table24hrChangeDataTextView.text = it.data?.percentChange24h?.toString()
-                tableWeekChangeDataTextView.text = it.data?.percentChange7d?.toString()
-                tableVolUSDDataTextView.text = it.data?.volume24h?.toString()
+                tableNameDataTextView.text = it.data?.name ?: Constants.LOADING
+                tablePriceUSDDataTextView.text = it.data?.price?.toString() ?: Constants.LOADING
+                tableMktCapDataTextView.text = it.data?.marketCap?.toString() ?: Constants.LOADING
+                tableCirculatingSupplyDataTextView.text = it.data?.circulatingSupply?.toString() ?: Constants.LOADING
+                tableTotalSupplyDataTextView.text = it.data?.totalSupply?.toString() ?: Constants.LOADING
+                tableMaxSupplyDataTextView.text = it.data?.maxSupply?.toString() ?: Constants.LOADING
+                table1hrChangeDataTextView.text = it.data?.percentChange1h?.toString() ?: Constants.LOADING
+                table24hrChangeDataTextView.text = it.data?.percentChange24h?.toString() ?: Constants.LOADING
+                tableWeekChangeDataTextView.text = it.data?.percentChange7d?.toString() ?: Constants.LOADING
+                tableVolUSDDataTextView.text = it.data?.volume24h?.toString() ?: Constants.LOADING
             }
         })
 //        createChartEntries("2021-01-01T00:00:00Z", "1d")

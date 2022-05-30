@@ -15,5 +15,7 @@ object Constants {
 
     const val REFRESH_PRICE_INTERVAL: Long = 60 * 1000 // 1min
 
+    const val LOADING = "Loading..."
+
     const val REGISTER = "REGISTER"
 }
