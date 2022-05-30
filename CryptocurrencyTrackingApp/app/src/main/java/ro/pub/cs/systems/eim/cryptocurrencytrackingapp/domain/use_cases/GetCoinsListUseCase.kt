@@ -14,7 +14,6 @@ import ro.pub.cs.systems.eim.cryptocurrencytrackingapp.domain.models.Coin
 import ro.pub.cs.systems.eim.cryptocurrencytrackingapp.utils.Resource
 import java.io.IOException
 
-// TODO: error checks
 class GetCoinsListUseCase(
     private val coinsRepository: CoinRepository
 ) {
@@ -29,8 +28,4 @@ class GetCoinsListUseCase(
             emit(Resource.Error<List<Coin>>("IO Error occurred"))
         }
     }.flowOn(Dispatchers.IO)
-
-//    operator fun invoke(): List<Coin> = withContext(Dispatchers.IO) {
-//        coinsRepository.getCoins().map { it.toCoin() }
-//    }
 }

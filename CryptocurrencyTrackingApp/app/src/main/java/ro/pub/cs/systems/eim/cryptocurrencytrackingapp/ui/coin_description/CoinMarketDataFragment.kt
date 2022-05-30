@@ -1,17 +1,20 @@
 package ro.pub.cs.systems.eim.cryptocurrencytrackingapp.ui.coin_description
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import ro.pub.cs.systems.eim.cryptocurrencytrackingapp.R
+import com.github.mikephil.charting.data.CandleEntry
+import com.github.mikephil.charting.data.Entry
+import com.github.mikephil.charting.data.LineData
+import com.github.mikephil.charting.data.LineDataSet
 import ro.pub.cs.systems.eim.cryptocurrencytrackingapp.databinding.FragmentCoinMarketDataBinding
-import ro.pub.cs.systems.eim.cryptocurrencytrackingapp.ui.coins_list.CoinsListViewModel
 import ro.pub.cs.systems.eim.cryptocurrencytrackingapp.utils.Constants
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 class CoinMarketDataFragment : Fragment() {
     private var coinId: String? = null
@@ -31,7 +34,8 @@ class CoinMarketDataFragment : Fragment() {
         }
 
         viewModel = ViewModelProvider(requireActivity())[CoinMarketDataViewModel::class.java]
-        viewModel.setData(coinId!!)
+        viewModel.setMarketData(coinId!!)
+        viewModel.setChartData(coinId!!, "2022-01-01T00:00:00Z", "1d")
     }
 
     override fun onCreateView(
@@ -55,8 +59,10 @@ class CoinMarketDataFragment : Fragment() {
                 table1hrChangeDataTextView.text = it.data?.percentChange1h?.toString()
                 table24hrChangeDataTextView.text = it.data?.percentChange24h?.toString()
                 tableWeekChangeDataTextView.text = it.data?.percentChange7d?.toString()
+                tableVolUSDDataTextView.text = it.data?.volume24h?.toString()
             }
         })
+//        createChartEntries("2021-01-01T00:00:00Z", "1d")
     }
 
     override fun onDestroyView() {
@@ -64,7 +70,23 @@ class CoinMarketDataFragment : Fragment() {
         binding = null
     }
 
-    private fun createChart() {
+    private fun createChartEntries(start: String, interval: String) {
+        val entries: MutableList<Entry> = mutableListOf()
+        viewModel.coinChartData.observe(viewLifecycleOwner, Observer { result ->
+            // DEBUG
+            for (i in 1..5) {
+                entries.add(Entry(i.toFloat(), (i * i).toFloat()))
+            }
 
+//            result.data?.get(i)?.price?.toFloat() ?: 0.toFloat()
+//            result.data?.map { entries.add(Entry(it., it.price.toFloat())) }
+        })
+        val chartDataSet = LineDataSet(entries, "Crypto chart")
+        binding?.chart?.data = LineData(chartDataSet)
     }
+
+//    private fun getPeriodInDays(start: String, end: String): Int {
+//        val datePattern = DateTimeFormatter.ofPattern("yyyy-MM-ddTHH:mm:ssZ")
+//        val startDate = LocalDateTime.parse(start.toCharArray())
+//    }
 }

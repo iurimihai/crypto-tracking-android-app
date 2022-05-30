@@ -19,10 +19,7 @@ class CoinDetailsActivity : AppCompatActivity() {
         val binding = ActivityCoinDetailsBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-//        coinId = intent?.extras?.getString(Constants.COIN_ID)
-//        coinId = intent?.extras?.getString(Constants.COIN_ID)
-
-
+        // TODO: remove nav_graph -> fragments are started by an button event
         val navHostFragment = supportFragmentManager
                 .findFragmentById(R.id.coin_details_fragment_container) as NavHostFragment
         navController = navHostFragment.navController
@@ -36,8 +33,6 @@ class CoinDetailsActivity : AppCompatActivity() {
 
         val args = Bundle()
         args.putString(Constants.COIN_ID, currentBundle?.getString(Constants.COIN_ID))
-//        args.putString(Constants.COIN_NAME, currentBundle?.getString(Constants.COIN_NAME))
-//        args.putString(Constants.COIN_SYMBOL, currentBundle?.getString(Constants.COIN_SYMBOL))
 
         navController.setGraph(navController.graph, args)
     }

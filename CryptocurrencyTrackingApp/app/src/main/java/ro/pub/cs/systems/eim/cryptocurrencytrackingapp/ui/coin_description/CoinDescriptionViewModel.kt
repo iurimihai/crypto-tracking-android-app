@@ -15,7 +15,6 @@ class CoinDescriptionViewModel(
 
     fun getCoinDescription(): LiveData<CoinDescription> = coinDescription
 
-    // TODO: not necessarily LiveData for list
     fun fetchCoinPrice(coinId: String) = viewModelScope.launch {
         coinDescription.value = getCoinDescriptionUseCase(coinId)
     }

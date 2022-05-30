@@ -20,11 +20,9 @@ import ro.pub.cs.systems.eim.cryptocurrencytrackingapp.utils.Constants
 
 class CoinAdapter: RecyclerView.Adapter<CoinAdapter.CoinViewHolder>() {
 
-    lateinit var viewModel: CoinsListViewModel
-    lateinit var lifecycleOwner: LifecycleOwner
+    // possible deprecated
     lateinit var coinsUiState: CoinsListState
 
-    // DEBUG
     lateinit var coins: List<Coin>
 
 
@@ -35,37 +33,18 @@ class CoinAdapter: RecyclerView.Adapter<CoinAdapter.CoinViewHolder>() {
     // TODO: Firebase DB will be used only first time for fetching favourites
     // TODO: all from above should be performed automatically in data layer/use case
     fun setData(coins: List<Coin>) {
-//        lifecycleOwner.lifecycleScope.launch {
-//            repeat(10) {
-//                viewModel.uiState.collect { uiState ->
-//                    coins = uiState.coins
-//                }
-//            }
-//        }
-//        while (viewModel.uiState.value.coins.isEmpty()) {
-//            coinsUiState = viewModel.uiState.value
-//        }
-//        coinsUiState = uiState
-//        notifyDataSetChanged()
         this.coins = coins
     }
 
-    fun updatePrice(coin: Coin, tvCoinPrice: TextView) {
-        val price = viewModel.getUpdatedPrice(coin)
-        CoroutineScope(Dispatchers.Main).launch {
-//            delay(1000L)
-            price.collect { tvCoinPrice.text = it }
-        }
-
-    }
-
-    fun priceUpdate(price: Flow<String>) {
-        CoroutineScope(Dispatchers.Main).launch {
-            price.collect {
-
-            }
-        }
-    }
+    // DEPRECATED
+//    fun updatePrice(coin: Coin, tvCoinPrice: TextView) {
+//        val price = viewModel.getUpdatedPrice(coin)
+//        CoroutineScope(Dispatchers.Main).launch {
+////            delay(1000L)
+//            price.collect { tvCoinPrice.text = it }
+//        }
+//
+//    }
 
     inner class CoinViewHolder(private val coinViewBinding: CoinViewBinding):
             RecyclerView.ViewHolder(coinViewBinding.root) {
@@ -73,18 +52,10 @@ class CoinAdapter: RecyclerView.Adapter<CoinAdapter.CoinViewHolder>() {
         fun bind(coin: Coin) {
             coinViewBinding.apply {
                 tvCoinName.text = getNameFormat(coin)
-                updatePrice(coin, tvCoinPrice)
 
                 root.setOnClickListener { view ->
-//                    val action = CoinsListFragmentDirections
-//                                    .actionCoinsListFragmentToCoinDescriptionFragment(coin.coinId)
-//                    root.findNavController().navigate(action)
-
                     Intent(view.context, CoinDetailsActivity::class.java).also {
                         it.putExtra(Constants.COIN_ID, coin.coinId)
-//                        it.putExtra(Constants.COIN_NAME, coin.name)
-//                        it.putExtra(Constants.COIN_SYMBOL, coin.symbol)
-                        Log.d("CoinAdapter", "onclicklistener")
                         view.context.startActivity(it)
                     }
                 }
