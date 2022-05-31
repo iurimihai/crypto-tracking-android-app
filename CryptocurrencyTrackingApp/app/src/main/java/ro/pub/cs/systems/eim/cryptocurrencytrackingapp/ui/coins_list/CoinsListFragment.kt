@@ -52,33 +52,13 @@ class CoinsListFragment : Fragment() {
         }
 
         viewModel = ViewModelProvider(requireActivity())[CoinsListViewModel::class.java]
-        coinAdapter.viewModel = viewModel
-//        while (viewModel.uiState.value.isLoading) {
-//
-//        }
-//        coinAdapter.setData(viewModel.uiState.value)
+
         // TODO: remove viewModel
         // TODO: use paging3 for price update
         viewModel.coins.observe(viewLifecycleOwner, Observer {
-            coinAdapter.setData(it.data?.subList(0, 5) ?: emptyList())
+            coinAdapter.setData(it.data ?: emptyList())
             coinAdapter.notifyDataSetChanged()
         })
-
-
-
-
-//        viewModel.getCoinsListUseCase = GetCoinsListUseCase(CoinRepository)
-//        viewModel.updatePriceUseCase = UpdatePriceUseCase(CoinRepository)
-//
-//        val adapter = CoinAdapter()
-//        adapter.viewModel = viewModel
-//
-//        lifecycleScope.launchWhenResumed { adapter.setData() }
-////
-////        sleep(5000)
-//
-//        recyclerView.adapter = adapter
-//        recyclerView.layoutManager = LinearLayoutManager(this.requireContext())
     }
 
     override fun onDestroyView() {

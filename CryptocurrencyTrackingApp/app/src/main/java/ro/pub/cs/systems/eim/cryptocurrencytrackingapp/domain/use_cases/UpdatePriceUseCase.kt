@@ -10,10 +10,10 @@ import kotlinx.coroutines.isActive
 import ro.pub.cs.systems.eim.cryptocurrencytrackingapp.data.repository.CoinRepository
 import ro.pub.cs.systems.eim.cryptocurrencytrackingapp.utils.Constants
 
-// TODO: error checks
 class UpdatePriceUseCase(
     private val coinsRepository: CoinRepository
 ) {
+    // DEPRECATED
 //    operator fun invoke(coinSymbol: String, refCurrency: String): Flow<String> {
 //        return flow {
 //            while (currentCoroutineContext().isActive) {
@@ -30,7 +30,7 @@ class UpdatePriceUseCase(
             delay(1000L)
             while (currentCoroutineContext().isActive) {
                 val updatedPrice =
-                        coinsRepository.getCoinPrice(coinId).quotes.uSD.price.toString()
+                        coinsRepository.getCoinPrice(coinId).quotes?.uSD?.price.toString()
                 emit(updatedPrice)
                 delay(Constants.REFRESH_PRICE_INTERVAL)
             }

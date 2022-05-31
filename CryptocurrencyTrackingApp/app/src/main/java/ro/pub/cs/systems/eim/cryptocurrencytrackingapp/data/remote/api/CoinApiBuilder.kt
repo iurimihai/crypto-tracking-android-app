@@ -13,7 +13,7 @@ object CoinApiBuilder {
             Retrofit.Builder()
                 .baseUrl(url)
                 .addConverterFactory(GsonConverterFactory.create())
-                .client(httpLogger())
+//                .client(httpLogger())
         }
         return builder
     }
@@ -30,6 +30,7 @@ object CoinApiBuilder {
             .create(CoinDataApi::class.java)
     }
 
+    // DEPRECATED
     val priceApiService: CoinPriceApi by lazy {
         retrofitBuild(Constants.COIN_PRICE_BASE_URL)
             .build()

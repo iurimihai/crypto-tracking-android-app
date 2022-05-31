@@ -1,6 +1,8 @@
 package ro.pub.cs.systems.eim.cryptocurrencytrackingapp.ui.coins_list
 
 import android.content.Intent
+import android.content.IntentFilter
+import android.net.ConnectivityManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
@@ -15,6 +17,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import ro.pub.cs.systems.eim.cryptocurrencytrackingapp.R
 import ro.pub.cs.systems.eim.cryptocurrencytrackingapp.databinding.ActivityMainBinding
+import ro.pub.cs.systems.eim.cryptocurrencytrackingapp.ui.InternetConnectionBroadcastReceiver
 import ro.pub.cs.systems.eim.cryptocurrencytrackingapp.ui.login.LoginActivity
 import ro.pub.cs.systems.eim.cryptocurrencytrackingapp.utils.Constants
 
@@ -22,12 +25,15 @@ class CoinsActivity : AppCompatActivity() {
 
     private lateinit var navController: NavController
     private lateinit var toggle: ActionBarDrawerToggle
+    private lateinit var internetReceiver: InternetConnectionBroadcastReceiver
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         val binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        registerBroadcastReceiver()
 
         // Get the navigation host fragment from this Activity
         val navHostFragment = supportFragmentManager
@@ -37,6 +43,7 @@ class CoinsActivity : AppCompatActivity() {
         // Make sure actions in the ActionBar get propagated to the NavController
         setupActionBarWithNavController(navController)
 
+        // TODO: change the actionbar
         val drawer = findViewById<DrawerLayout>(R.id.user_drawer_layout)
         toggle = ActionBarDrawerToggle(this, drawer, R.string.open, R.string.close)
         drawer.addDrawerListener(toggle)
@@ -74,6 +81,18 @@ class CoinsActivity : AppCompatActivity() {
      */
     override fun onSupportNavigateUp(): Boolean {
         return navController.navigateUp() || super.onSupportNavigateUp()
+    }
+
+    private fun registerBroadcastReceiver() {
+        internetReceiver = InternetConnectionBroadcastReceiver()
+        IntentFilter(ConnectivityManager.EXTRA_NO_CONNECTIVITY).also {
+            registerReceiver(internetReceiver, it)
+        }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        unregisterReceiver(internetReceiver)
     }
 
     private fun openLoginRegisterActivity(register: Boolean) {
